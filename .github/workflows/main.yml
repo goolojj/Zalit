@@ -1,0 +1,27 @@
+name: Build Crimson Client (1.21.11)
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unzip Project
+        run: unzip -o *.zip
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.14.1'
+      - name: Build Mod JAR
+        run: gradle build --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Crimson-Client-1.21.11
+          path: build/libs/*.jar
